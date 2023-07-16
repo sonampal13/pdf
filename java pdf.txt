@@ -1,0 +1,442 @@
+public class FactorialCalculator {
+    public static void main(String[] args) {
+        int number = 5; // The number for which we want to calculate the factorial
+        long factorial = calculateFactorial(number);
+        System.out.println("Factorial of " + number + " is: " + factorial);
+    }
+
+    public static long calculateFactorial(int number) {
+        if (number == 0 || number == 1) {
+            return 1;
+        } else {
+            return number * calculateFactorial(number - 1);
+        }
+    }
+}
+
+
+2. import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class StudentInformationSystem {
+    private static final String FILE_PATH = "student_data.txt";
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("1. Add Student");
+            System.out.println("2. Display All Students");
+            System.out.println("3. Search Student");
+            System.out.println("4. Delete Student");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addStudent();
+                    break;
+                case 2:
+                    displayAllStudents();
+                    break;
+                case 3:
+                    searchStudent();
+                    break;
+                case 4:
+                    deleteStudent();
+                    break;
+                case 5:
+                    System.out.println("Exiting the program...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        } while (choice != 5);
+    }
+
+    private static void addStudent() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter student name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter student age: ");
+        int age = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+        System.out.print("Enter student gender: ");
+        String gender = scanner.nextLine();
+        System.out.print("Enter student major: ");
+        String major = scanner.nextLine();
+
+        String studentInfo = String.format("%s,%d,%s,%s", name, age, gender, major);
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH, true))) {
+            writer.println(studentInfo);
+            System.out.println("Student information added successfully.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while adding student information: " + e.getMessage());
+        }
+    }
+
+    private static void displayAllStudents() {
+        List<String> studentList = readStudentData();
+        if (studentList.isEmpty()) {
+            System.out.println("No students found.");
+        } else {
+            System.out.println("Student Information:");
+            for (String studentInfo : studentList) {
+                String[] studentData = studentInfo.split(",");
+                String name = studentData[0];
+                int age = Integer.parseInt(studentData[1]);
+                String gender = studentData[2];
+                String major = studentData[3];
+
+                System.out.println("Name: " + name);
+                System.out.println("Age: " + age);
+                System.out.println("Gender: " + gender);
+                System.out.println("Major: " + major);
+                System.out.println("------------------------");
+            }
+        }
+    }
+
+    private static void searchStudent() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter student name to search: ");
+        String searchName = scanner.nextLine();
+
+        List<String> studentList = readStudentData();
+        boolean found = false;
+
+        for (String studentInfo : studentList) {
+            String[] studentData = studentInfo.split(",");
+            String name = studentData[0];
+            int age = Integer.parseInt(studentData[1]);
+            String gender = studentData[2];
+            String major = studentData[3];
+
+            if (name.equalsIgnoreCase(searchName)) {
+                System.out.println("Student Found:");
+                System.out.println("Name: " + name);
+                System.out.println("Age: " + age);
+                System.out.println("Gender: " + gender);
+                System.out.println("Major: " + major);
+                System.out.println("------------------------");
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            System.out.println("Student not found.");
+        }
+    }
+
+    private static void deleteStudent() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter student name to delete: ");
+        String deleteName = scanner.nextLine();
+
+        List<String> studentList = readStudentData();
+        boolean found = false;
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
+            for (String studentInfo : studentList) {
+                String[] studentData = studentInfo.split(",");
+                String name = studentData[0];
+
+                if (name.equalsIgnoreCase(deleteName)) {
+                    found = true;
+                } else {
+                    writer.println(studentInfo);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while deleting student information: " + e.getMessage());
+        }
+
+        if (found) {
+            System.out.println("Student deleted successfully.");
+        } else {
+            System.out.println("Student not found.");
+        }
+    }
+
+    private static List<String> readStudentData() {
+        List<String> studentList = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                studentList.add(line);
+            }
+        } catch (FileNotFoundException e) {
+            // Ignore if the file doesn't exist yet
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading student data: " + e.getMessage());
+        }
+
+        return studentList;
+    }
+}
+
+
+3.  import java.util.Random;
+
+public class RandomNumberGenerator {
+    public static void main(String[] args) {
+        Random random = new Random();
+
+        System.out.println("Random Numbers:");
+
+        for (int i = 0; i < 5; i++) {
+            int randomNumber = random.nextInt();
+            System.out.println(randomNumber);
+        }
+    }
+}
+
+
+4.  import java.applet.Applet;
+import java.awt.Button;
+import java.awt.Label;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class RegistrationApplet extends Applet implements ActionListener {
+    private TextField nameTextField;
+    private TextField emailTextField;
+    private TextField passwordTextField;
+    private Button registerButton;
+
+    @Override
+    public void init() {
+        setLayout(null);
+
+        Label nameLabel = new Label("Name:");
+        nameLabel.setBounds(50, 50, 60, 20);
+        add(nameLabel);
+
+        nameTextField = new TextField();
+        nameTextField.setBounds(120, 50, 150, 20);
+        add(nameTextField);
+
+        Label emailLabel = new Label("Email:");
+        emailLabel.setBounds(50, 80, 60, 20);
+        add(emailLabel);
+
+        emailTextField = new TextField();
+        emailTextField.setBounds(120, 80, 150, 20);
+        add(emailTextField);
+
+        Label passwordLabel = new Label("Password:");
+        passwordLabel.setBounds(50, 110, 60, 20);
+        add(passwordLabel);
+
+        passwordTextField = new TextField();
+        passwordTextField.setBounds(120, 110, 150, 20);
+        passwordTextField.setEchoChar('*');
+        add(passwordTextField);
+
+        registerButton = new Button("Register");
+        registerButton.setBounds(120, 150, 80, 30);
+        registerButton.addActionListener(this);
+        add(registerButton);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == registerButton) {
+            String name = nameTextField.getText();
+            String email = emailTextField.getText();
+            String password = passwordTextField.getText();
+
+            // Perform registration logic here, e.g., validate inputs, store in database, etc.
+            // You can replace this with your own implementation.
+
+            System.out.println("Registration Successful!");
+            System.out.println("Name: " + name);
+            System.out.println("Email: " + email);
+            System.out.println("Password: " + password);
+        }
+    }
+}
+<html>
+    <body>
+        <applet code="RegistrationApplet.class" width="300" height="200">
+            Your browser does not support Java applets.
+        </applet>
+    </body>
+</html>
+
+
+5.  import java.util.LinkedList;
+import java.util.Queue;
+
+public class StackUsingQueue<T> {
+    private Queue<T> mainQueue;
+    private Queue<T> tempQueue;
+
+    public StackUsingQueue() {
+        mainQueue = new LinkedList<>();
+        tempQueue = new LinkedList<>();
+    }
+
+    public void push(T element) {
+        tempQueue.add(element);
+
+        while (!mainQueue.isEmpty()) {
+            tempQueue.add(mainQueue.poll());
+        }
+
+        Queue<T> swapQueue = mainQueue;
+        mainQueue = tempQueue;
+        tempQueue = swapQueue;
+    }
+
+    public T pop() {
+        if (mainQueue.isEmpty()) {
+            throw new IllegalStateException("Stack is empty.");
+        }
+
+        return mainQueue.poll();
+    }
+
+    public T peek() {
+        if (mainQueue.isEmpty()) {
+            throw new IllegalStateException("Stack is empty.");
+        }
+
+        return mainQueue.peek();
+    }
+
+    public boolean isEmpty() {
+        return mainQueue.isEmpty();
+    }
+
+    public int size() {
+        return mainQueue.size();
+    }
+
+    public static void main(String[] args) {
+        StackUsingQueue<Integer> stack = new StackUsingQueue<>();
+
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+
+        System.out.println("Stack size: " + stack.size());
+        System.out.println("Top element: " + stack.peek());
+
+        System.out.println("Popped element: " + stack.pop());
+        System.out.println("Popped element: " + stack.pop());
+
+        System.out.println("Stack is empty: " + stack.isEmpty());
+    }
+}
+
+
+6.  import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class MyServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        response.getWriter().println("<h1>GET method called</h1>");
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        response.getWriter().println("<h1>POST method called</h1>");
+    }
+}
+
+
+7.  <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    
+    <%-- Check if the form is submitted --%>
+    <%
+        if (request.getMethod().equalsIgnoreCase("POST")) {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+
+            // Validate the username and password
+            if (username.equals("admin") && password.equals("password")) {
+                out.println("<h3>Login successful!</h3>");
+            } else {
+                out.println("<h3>Invalid username or password. Please try again.</h3>");
+            }
+        }
+    %>
+
+    <form method="post" action="">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>
+
+
+8. public class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Thread is running.");
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Count: " + i);
+            try {
+                Thread.sleep(1000); // Pause for 1 second
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Thread execution is complete.");
+    }
+
+    public static void main(String[] args) {
+        MyRunnable myRunnable = new MyRunnable();
+        Thread thread = new Thread(myRunnable);
+        thread.start();
+    }
+}
+
+
+9.  <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Current Date and Time</title>
+</head>
+<body>
+    <h1>Current Date and Time</h1>
+    
+    <%
+        java.util.Date currentDate = new java.util.Date();
+        out.println("<p>Current Date and Time: " + currentDate.toString() + "</p>");
+    %>
+</body>
+</html>
+
+
+10.   
+
